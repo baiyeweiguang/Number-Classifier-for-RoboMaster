@@ -1,47 +1,24 @@
-# Number classifier for MNIST-like dataset
+# 装甲板数字识别器
 
-adapt to RoboMaster autoaim task
+有适配rm_vision项目的example，但由于我们战队没用ROS2，暂时无法测试
 
-## Introduction
 
-Pytorch based Convolutional Neural Network(CNN), which can be used to classify images
-
-Dependencies:
-- Pytorch
-- numpy
-- OpenCV
-- ONNX
-
-## Get started
-
-### 0. Install dependencies
+### 0. 安装依赖
 
 ```
 pip install -r requirements.txt
 ```
 
-### 1. Prepare dataset. 
+### 1. 准备数据集 
 
-unzip the armors.zip in dataset/ and use the following script to generate armors.txt  
+我们自己制作的数据集在dataset/armors.zip里，约有1.6w张图片，大小均为28x28，每张图片有两个标签，第一个标签为0或1，对应负样本和真实装甲板，第二个标签为0-9,对应标签为 0:负样本 1-5:1-5号装甲板 6:老哨兵 7:前哨站 8:基地 9:新哨兵
 
-```
-import os
+使用make_txt.py来生成一个txt文件方便Dataloader读取，记得修改make_txt.py中的path为你的路径
 
-def mktxt():
-  path = "your_path"
-  idx = 7000
-  txt = open(path+"armors.txt","w")
-  while os.path.exists(path+"armors/{}.jpg".format(idx)):
-    txt.write(path+"armors/{}.jpg\n".format(idx))
-    idx+=1
-  txt.close()
 
-mktxt()
+### 2. 训练
 
-```
-### 2. Train 
-
-adjust the cfg_path in main() of src/train.py to your path of armor.txt, run
+修改train.py中main()的cfg_path为armors.txt的路径，运行
 
 ```
 python train.py
